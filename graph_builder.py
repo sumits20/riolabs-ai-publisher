@@ -6,7 +6,7 @@ from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
 
 from tools.wordpress_tools import get_recent_posts_tool
-from tools.tavily_research import research_topic  # your tavily tool
+from tools.tavily_research import research_topic
 
 # --- State ---
 class ChatState(TypedDict):
