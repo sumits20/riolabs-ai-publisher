@@ -9,7 +9,7 @@ def get_recent_posts(limit: int = 10) -> list[dict]:
         "_fields": "id,date,slug,title,link"
     }
 
-    response = requests.get(url, params=params, timeout=20)
+    response = requests.get(url, params=params, timeout=(10, 30))
     response.raise_for_status()
 
     posts = response.json()
@@ -30,16 +30,27 @@ def get_recent_posts(limit: int = 10) -> list[dict]:
 @tool
 def get_recent_posts_tool(limit: int = 10) -> str:
     """
-    Fetch recent posts already published on the user's own WordPress website. riolabs.in
+    Fetch recent posts already published on the user's own WordPress website.
     Use this tool when you need to know what topics already exist on the user's blog,
     avoid duplicate ideas, compare against existing content, or understand what has already been published.
     Returns recent post titles and links.
     """
-    posts = get_recent_posts(limit)
+    try:
+        posts = get_recent_posts(limit)
 
-    formatted = "\n".join([
-        f"{p['title']} ({p['link']})"
-        for p in posts
-    ])
+        if not posts:
+            return "No recent posts were found on the website."
 
-    return formatted
+        return "\n".join(
+            f"{p['title']} ({p['link']})"
+            for p in posts
+        )
+
+    except requests.exceptions.ConnectTimeout:
+        return "Could not connect to the WordPress website in time. The site may be slow or temporarily unreachable."
+
+    except requests.exceptions.ReadTimeout:
+        return "The WordPress website took too long to respond."
+
+    except requests.exceptions.RequestException as e:
+        return f"Failed to fetch recent posts from WordPress: {str(e)}"
