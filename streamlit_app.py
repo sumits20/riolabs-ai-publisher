@@ -8,14 +8,19 @@ from graph_builder import build_graph
 st.title("Riolabs Content Agent")
 
 import requests
+from requests.auth import HTTPBasicAuth
 
-if st.button("Test WP endpoint direct"):
+if st.button("Test authenticated WP direct"):
     try:
         r = requests.get(
             "https://riolabs.in/wp-json/wp/v2/posts",
             params={"per_page": 3, "_fields": "id,title,link"},
+            auth=HTTPBasicAuth(
+                st.secrets["WORDPRESS_USERNAME"],
+                st.secrets["WORDPRESS_APP_PASSWORD"]
+            ),
             headers={"User-Agent": "Mozilla/5.0 (compatible; RiolabsContentAgent/1.0)"},
-            timeout=(10, 30)
+            timeout=(15, 45),
         )
         st.write("Status code:", r.status_code)
         st.json(r.json())
