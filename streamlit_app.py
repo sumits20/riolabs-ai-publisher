@@ -1,20 +1,11 @@
 import streamlit as st
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
+from tools.tavily_research import research_topic
 
 from graph_builder import build_graph
 
 st.title("Riolabs Content Agent")
-
-from tools.tavily_research import research_topic
-
-st.title("Riolabs Content Agent")
-
-if st.button("Test Tavily tool"):
-    result = research_topic.invoke(
-        {"query": "recent science discoveries for blog ideas"}
-    )
-    st.write(result)
 
 # LLM
 llm = ChatOpenAI(
