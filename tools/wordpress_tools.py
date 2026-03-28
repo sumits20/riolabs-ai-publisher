@@ -1,26 +1,17 @@
 import requests
+from langchain_core.tools import tool
 
+@tool
+def get_recent_posts_tool(limit: int = 10) -> str:
+    """
+    Fetch recent blog posts from the website.
+    Returns titles and links of recent posts.
+    """
+    posts = get_recent_posts(limit)
 
-def get_recent_posts(limit: int = 10) -> list[dict]:
-    url = "https://riolabs.in/wp-json/wp/v2/posts"
-    params = {
-        "per_page": limit,
-        "_fields": "id,date,slug,title,link"
-    }
+    formatted = "\n".join([
+        f"{p['title']} ({p['link']})"
+        for p in posts
+    ])
 
-    response = requests.get(url, params=params, timeout=20)
-    response.raise_for_status()
-
-    posts = response.json()
-
-    cleaned_posts = []
-    for post in posts:
-        cleaned_posts.append({
-            "id": post.get("id"),
-            "date": post.get("date"),
-            "slug": post.get("slug"),
-            "title": post.get("title", {}).get("rendered", ""),
-            "link": post.get("link")
-        })
-
-    return cleaned_posts
+    return formatted
