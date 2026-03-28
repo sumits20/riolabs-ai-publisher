@@ -30,8 +30,10 @@ def get_recent_posts(limit: int = 10) -> list[dict]:
 @tool
 def get_recent_posts_tool(limit: int = 10) -> str:
     """
-    Fetch recent blog posts from the website.
-    Returns titles and links of recent posts.
+    Fetch recent posts already published on the user's own WordPress website. riolabs.in
+    Use this tool when you need to know what topics already exist on the user's blog,
+    avoid duplicate ideas, compare against existing content, or understand what has already been published.
+    Returns recent post titles and links.
     """
     posts = get_recent_posts(limit)
 
