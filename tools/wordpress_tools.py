@@ -8,8 +8,16 @@ def get_recent_posts(limit: int = 10) -> list[dict]:
         "per_page": limit,
         "_fields": "id,date,slug,title,link"
     }
+    headers = {
+        "User-Agent": "Mozilla/5.0 (compatible; RiolabsContentAgent/1.0)"
+    }
 
-    response = requests.get(url, params=params, timeout=(10, 30))
+    response = requests.get(
+        url,
+        params=params,
+        headers=headers,
+        timeout=(10, 30)
+    )
     response.raise_for_status()
 
     posts = response.json()
