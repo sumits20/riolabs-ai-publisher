@@ -7,6 +7,21 @@ from graph_builder import build_graph
 
 st.title("Riolabs Content Agent")
 
+import requests
+
+if st.button("Test WP endpoint direct"):
+    try:
+        r = requests.get(
+            "https://riolabs.in/wp-json/wp/v2/posts",
+            params={"per_page": 3, "_fields": "id,title,link"},
+            headers={"User-Agent": "Mozilla/5.0 (compatible; RiolabsContentAgent/1.0)"},
+            timeout=(10, 30)
+        )
+        st.write("Status code:", r.status_code)
+        st.json(r.json())
+    except Exception as e:
+        st.error(str(e))
+
 # LLM
 llm = ChatOpenAI(
     model="gpt-4o-mini",
