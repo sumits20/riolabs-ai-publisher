@@ -1,8 +1,4 @@
-import streamlit as st
-from tools.wordpress_tools import get_recent_posts
+from tools.wordpress_tools import get_recent_posts_tool
 
-st.title("Riolabs Content Agent")
-
-if st.button("Load recent posts"):
-    posts = get_recent_posts(5)
-    st.write(posts)
+if st.button("Test tool"):
+    st.write(get_recent_posts_tool.invoke({}))
